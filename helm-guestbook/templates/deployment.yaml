@@ -10,13 +10,6 @@ metadata:
     pod-security.kubernetes.io/priveledged: latest
 spec:
   replicas: {{ .Values.replicaCount }}
-  securityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop: ['ALL']
-    runAsNonRoot: true
-    seccompProfile:
-      type: RuntimeDefault
   revisionHistoryLimit: 3
   selector:
     matchLabels:
@@ -32,6 +25,13 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ['ALL']
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
           ports:
             - name: http
               containerPort: 80
